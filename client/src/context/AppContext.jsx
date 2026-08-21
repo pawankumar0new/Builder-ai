@@ -7,14 +7,21 @@ export function AppContextProvider({children}){
     
     const [user, setUser] = useState(null)
     const [loadingUser, setLoadingUser] = useState(true)
+    const [sessionError, setSessionError] = useState(null)
 
 
     const checkSession = useCallback(async()=>{
+        setLoadingUser(true)
+        setSessionError(null)
         try{
-            const {data} = await api.get("api/auth/me")
+            const {data} = await api.get("/api/auth/me")
             setUser(data.user);
         }catch(error){
-            setUser(null)
+            if(error.response?.status === 401){
+                setUser(null)
+            }else{
+                setSessionError(error)
+            }
         }finally{
             setLoadingUser(false)
         }
@@ -23,7 +30,7 @@ export function AppContextProvider({children}){
         checkSession()
     },[checkSession])
     return(
-        <AppContext.Provider value={{user, loadingUser}}> 
+        <AppContext.Provider value={{user, loadingUser, sessionError, retrySession: checkSession}}> 
             {children}
         </AppContext.Provider>
     )
