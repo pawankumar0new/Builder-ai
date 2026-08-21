@@ -16,9 +16,13 @@ const AuthPage = ({ mode }) => {
     setError('')
     setSubmitting(true)
     try {
-      const { data } = await api.post(`/api/auth/${isRegister ? 'register' : 'login'}`, form)
-      if (data.user) await retrySession()
-      navigate('/', { replace: true })
+      await api.post(`/api/auth/${isRegister ? 'register' : 'login'}`, form)
+      const session = await retrySession()
+      if (session.authenticated) {
+        navigate('/', { replace: true })
+      } else {
+        setError('Authentication succeeded, but the session could not be confirmed. Please try again.')
+      }
     } catch (requestError) {
       setError(requestError.response?.data?.error || 'Unable to authenticate. Please try again.')
     } finally {
