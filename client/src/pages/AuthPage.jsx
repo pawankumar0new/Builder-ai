@@ -83,30 +83,30 @@ const AuthPage = ({ mode }) => {
               </p>
 
             </div>
-            {error && <div className='mb-6 p-3 border border-red-200 bg-red-50 text-red-700 text-xs rounded'>{error}</div>}
+            {error && <div role='alert' className='mb-6 p-3 border border-red-200 bg-red-50 text-red-700 text-xs rounded'>{error}</div>}
             <form className='space-y-6' onSubmit={handleSubmit}>
               {!isLogin && (
                 <div>
-                  <lable className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2">
+                  <label htmlFor='name' className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2">
                     Full Name
-                  </lable>
-                  <input type= "text" value={name} onChange={(e)=> setName(e.target.value)} required className='w-full pl-2 py-2 border-2 border-zinc-200 focus:outline-none focus:border-zinc-950 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 transition-colors' placeholder='john doe'/>
+                  </label>
+                  <input id='name' type= "text" value={name} onChange={(e)=> setName(e.target.value)} required className='w-full pl-2 py-2 border-2 border-zinc-200 focus:outline-none focus:border-zinc-950 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 transition-colors' placeholder='john doe'/>
                 </div>
               )}
                <div>
-                  <lable className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2">
+                  <label htmlFor='email' className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2">
                     Email Address 
-                  </lable>
-                  <input type= "email" value={email} onChange={(e)=> setEmail(e.target.value)} required className='w-full pl-2 py-2 border-2 border-zinc-200 focus:outline-none focus:border-zinc-950 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 transition-colors' placeholder='you@example.com'/>
+                  </label>
+                  <input id='email' type= "email" value={email} onChange={(e)=> setEmail(e.target.value)} required className='w-full pl-2 py-2 border-2 border-zinc-200 focus:outline-none focus:border-zinc-950 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 transition-colors' placeholder='you@example.com'/>
                 </div>
 
                 <div>
-                  <lable className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2">
+                  <label htmlFor='password' className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2">
                     Password 
-                  </lable>
+                  </label>
                   <div className='relative'>
-                    <input type= {showPassword ? "text" : "password"} value={password} onChange={(e)=> setPassword(e.target.value)} required className='w-full pl-2 py-2 border-2 border-zinc-200 focus:outline-none focus:border-zinc-950 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 pr-8' placeholder='••••••••'/>
-                    <button type='button' onClick={()=>setShowPassword(!showPassword)} className='absolute right-2 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-600 flex items-center justify-center cursor-pointer transition-colors'>
+                    <input id='password' type= {showPassword ? "text" : "password"} value={password} onChange={(e)=> setPassword(e.target.value)} required className='w-full pl-2 py-2 border-2 border-zinc-200 focus:outline-none focus:border-zinc-950 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 pr-8' placeholder='••••••••'/>
+                    <button type='button' aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={()=>setShowPassword(!showPassword)} className='absolute right-2 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-600 flex items-center justify-center cursor-pointer transition-colors'>
                       {showPassword ? <EyeOffIcon size={14}/> : <EyeIcon size={14}/>}
                     </button>
                   </div>

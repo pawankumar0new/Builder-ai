@@ -267,7 +267,15 @@ api.defaults.adapter = async (config) => {
     const getUser = () => {
         try {
             const saved = localStorage.getItem("mock_user");
-        return saved ? JSON.parse(saved) : null;
+        if (!saved) return null;
+
+        const user = JSON.parse(saved);
+        return user && typeof user === "object" && !Array.isArray(user)
+          && typeof user._id === "string" && user._id.trim()
+          && typeof user.name === "string" && user.name.trim()
+          && typeof user.email === "string" && user.email.trim()
+          ? user
+          : null;
         } catch {
         return null;
         }
