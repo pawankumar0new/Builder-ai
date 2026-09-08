@@ -12,20 +12,32 @@ const PublishPage = () => {
     const [error, setError] = useState("")
 
     useEffect(()=>{
-        if(!id) return;
+        let cancelled = false
+        setLoading(true)
+        setProject(null)
+        setError("")
+
+        if(!id){
+            setLoading(false)
+            return () => { cancelled = true }
+        }
+
         const fetchPublicProject = async()=>{
             try{
                 const {data} = await api.get(`/api/projects/public/${id}`)
-                setProject(data)
+                if(!cancelled) setProject(data)
 
             }catch(err){
-                console.error("Failed to load public project:", err)
-                setError(err?.response?.data?.error || "This website is not available or is not published yet.")
+                if(!cancelled){
+                    console.error("Failed to load public project:", err)
+                    setError(err?.response?.data?.error || "This website is not available or is not published yet.")
+                }
             }finally{
-                setLoading(false)
+                if(!cancelled) setLoading(false)
             }
         }
          fetchPublicProject();
+         return () => { cancelled = true }
     },[id])
     if(loading){
         return <Loading/>
