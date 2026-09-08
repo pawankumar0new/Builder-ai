@@ -6,10 +6,15 @@ import HomePage from './pages/HomePage'
 import BuilderPage from './pages/BuilderPage'
 import PreviewPage from './pages/PreviewPage'
 import { Navigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+import PublishModel from './components/PublishModel'
+import PublishPage from './pages/PublishPage'
 
 function App() {
   return (
-    <Routes>
+    <>
+      <Toaster/>
+      <Routes>
       {/*Login routes*/}
       <Route element={<GuestLayout/>}>
         <Route path='/login' element={<AuthPage mode="login"/>}/>
@@ -22,10 +27,16 @@ function App() {
         <Route path='/builder/:id' element={<BuilderPage/>}/>
         <Route path='/preview/:id' element={<PreviewPage/>}/>
       </Route>
+
+      {/*Publish Routes*/}
+      <Route path='/publish/:id' element={<PublishPage/>}/>
+
       {/*Catch all*/}
       <Route path='*' element={<Navigate to='/' replace/>}/>
     </Routes>
-  )
+
+    </>
+      )
 }
 
 export default App
