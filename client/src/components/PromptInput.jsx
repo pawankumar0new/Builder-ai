@@ -21,7 +21,7 @@ const PromptInput = ({onSubmit, loading = false, placeholder= "Describe the webs
     }
 
     const handleKeyDown = (e) =>{
-        if(e.key === "Enter" && !e.shiftkey){
+        if(e.key === "Enter" && !e.shiftKey){
             e.preventDefault()
             handleSubmit()
         }
@@ -59,7 +59,7 @@ const PromptInput = ({onSubmit, loading = false, placeholder= "Describe the webs
     
     <div className={`bg-white border border-zinc-200 rounded-2xl flex items-end gap-2 focus-within:ring-1 focus-within:ring-zinc-300 transition ${large? "p-4": "p-3"}`}>
 
-        <textarea ref={textareaRef} value={value} onChange={(e)=>setValue(e.target.value)} onKeyDown={handleKeyDown} placeholder={placeholder} disabled={loading} rows={large ? 5 : 1} className={`flex-1 bg-transparent border-none ontline-none resize-none text-zinc-900 placeholder:text-zinc-400 ${large ? "text-base" : "text:sm"}`}/>
+        <textarea ref={textareaRef} value={value} onChange={(e)=>setValue(e.target.value)} onKeyDown={handleKeyDown} placeholder={placeholder} disabled={loading} rows={large ? 5 : 1} className={`flex-1 bg-transparent border-none outline-none resize-none text-zinc-900 placeholder:text-zinc-400 ${large ? "text-base" : "text-sm"}`}/>
 
         <button onClick={()=>handleSubmit()}
             disabled={!value.trim() || loading}

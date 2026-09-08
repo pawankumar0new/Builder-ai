@@ -1,4 +1,4 @@
-import { BotIcon, BotMessageSquareIcon  } from 'lucide-react'
+import { BotIcon, BotMessageSquareIcon, UserIcon  } from 'lucide-react'
 import React,{useEffect, useState, useRef} from 'react'
 import PromptInput from './PromptInput'
 
@@ -21,8 +21,8 @@ const ChatPanel = ({messages, onSend, loading}) => {
                 <div key={i}>
                     <div className='flex gap-2.5 items-start'>
                         <div className='shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5 bg-zinc-50'>
-                            {msg.role === "ussr" ? (
-                                <UserICon size={14} className='text-zinc-500'/>
+                            {msg.role === "user" ? (
+                                <UserIcon size={14} className='text-zinc-500'/>
                             ):(
                                 <BotMessageSquareIcon size={14} className="text-zinc-700"/>
                             )}

@@ -64,7 +64,7 @@ const FileExplorer = ({files, activeFile, onFileSelect}) => {
 
     const tree = useMemo(()=> buildTree(Object.keys(files)), [files])
   return (
-    <div className='py-2 overflow-y-auto hide-scrollbar'>
+    <div className='h-full py-2 overflow-y-auto hide-scrollbar'>
         <p className='px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-400'>Files</p>
         {tree.map((node)=>(
             <TreeItem key={node.path} node={node} activeFile={activeFile} onFileSelect={onFileSelect}/>

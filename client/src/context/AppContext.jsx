@@ -101,8 +101,11 @@ export function AppContextProvider({children}){
         }
     }
 
-    const loadProjects = async ()=>{
-        if(!user) return;
+    const loadProjects = useCallback(async ()=>{
+        if(!user){
+            setLoadingProjects(false)
+            return
+        }
         try{
             const {data} = await api.get("/api/projects")
             setProjects(data)
@@ -112,7 +115,7 @@ export function AppContextProvider({children}){
         }finally{
             setLoadingProjects(false)
         }
-    }
+    },[user])
 
     const loadProject = useCallback(async(id, silent = false)=>{
          if(!user) return;
@@ -196,10 +199,10 @@ export function AppContextProvider({children}){
             if(!activeProject || !user) return;
             setChatLoading(true)
             try{
-                const {data} = await app.post(`/api/projects/${activeProject._id}/chat`, {prompt});
+                const {data} = await api.post(`/api/projects/${activeProject._id}/chat`, {prompt});
                 setActiveProject(data)
                 if(data.errors && data.errors. length > 0){
-                    toast.error(`${data.errors.length} revision pathc(es) failed`)
+                    toast.error(`${data.errors.length} revision patch(es) failed`)
                 }else{
                     toast.success(`Updated to version ${data.version}`)
                 }

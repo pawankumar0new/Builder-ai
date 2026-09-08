@@ -44,7 +44,7 @@ function SandpackFileWatcher({onLiveFilesChange}){
 
 const PreviewPanel = ({project, activeFile, showCode}) => {
     const [showErrorOverlay, setShowErrorOverlay] = useState(true);
-    const [liveFiles, setLiveFiles] = useState(project.files)
+    const [liveFiles, setLiveFiles] = useState(project.files || {})
     const [prevProjectKey, setPrevProjectKey] = useState(`${project._id}-${project.version}`)
     const previewContainerRef = useRef(null)
 
@@ -72,7 +72,7 @@ const PreviewPanel = ({project, activeFile, showCode}) => {
     const currentKey = `${project._id}-${project.version}`;
     if(prevProjectKey !== currentKey){
         setPrevProjectKey(currentKey);
-        setLiveFiles(project.files)
+        setLiveFiles(project.files || {})
     }
 
     const handleLiveFilesChange =(newFiles) =>{

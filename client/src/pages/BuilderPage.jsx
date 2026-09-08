@@ -44,7 +44,7 @@ const BuilderPage = () => {
 
   const handleOpenPreview = () =>{
     if(!id) return;
-    widow.open(`/preview/${id}`, "_blank")
+    window.open(`/preview/${id}`, "_blank")
   }
 
   const handlePublish = async ()=>{
@@ -56,8 +56,8 @@ const BuilderPage = () => {
       setPublishUrl(url)
       toast.success("Website published successfully!")
     }catch(error){
-      console.error("Publish failed:", err);
-      toast.error(err?.response?.data?.error || "Publish failed")
+      console.error("Publish failed:", error);
+      toast.error(error?.response?.data?.error || "Publish failed")
     }finally{
       setPublishing(false)
     }
@@ -107,9 +107,9 @@ const BuilderPage = () => {
           <div className='flex-1 overflow-hidden'>
             {
               leftTab === "chat" ? (
-                <ChatPanel messages={activeProject.messages} onSend={handleChat} loading={chatLoading}/>
+                <ChatPanel messages={activeProject.messages || []} onSend={handleChat} loading={chatLoading}/>
               ):(
-                <FileExplorer files={activeProject.files} activeFile={activeFile} onFileSelect={(path)=>{
+                <FileExplorer files={activeProject.files || {}} activeFile={activeFile} onFileSelect={(path)=>{
                   setActiveFile(path)
                   setShowCode(true)
                 }}/>
