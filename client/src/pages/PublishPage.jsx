@@ -12,6 +12,8 @@ const PublishPage = () => {
 
   useEffect(() => {
     let cancelled = false
+    setError(null)
+    setProject(null)
 
     const loadPublishedProject = async () => {
       try {
