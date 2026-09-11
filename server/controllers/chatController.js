@@ -1,4 +1,4 @@
-import { Project } from "../models/Project"
+import { Project } from "../models/Project.js"
 import { reviseProject } from "../services/ai.js"
 export function buildManifest(files){
     const manifest = []
@@ -19,12 +19,12 @@ export async function chat(req, res){
         return 
     }
     if(!req.user){
-        res.status(401).json({error:"prompt is required"})
+        res.status(401).json({error:"Unauthorized"})
         return 
     }
     const project = await Project.findOne({_id:req.params.id, owner:req.user.userId})
     if(!project){
-        res.stattus(404).json({error: "Project not found"})
+        res.status(404).json({error: "Project not found"})
         return
     }
     project.status = "revising",
@@ -47,7 +47,7 @@ export async function chat(req, res){
         console.log(
             `[AI] Revising project ${project._id}: "${prompt.slice(0, 80)}..."` + `(${manifest.length} files, manifest ~${JSON.stringify(manifest).length} chars)`
         )
-        const result = await reviseProject(prompt, manifest, relevantFiles, recentMessages)
+        const result = await reviseProject(prompt, manifest, relaventFiles, recentMessges)
         console.log(`[AI] Got ${result.operations.length} operations: ${result.description}`)
 
         // Apply operations to file map
@@ -85,8 +85,8 @@ export async function chat(req, res){
         })
 
     }catch(err){
-        console.error(`[AI Revision Error] ${err.messages}`)
-        project.status = "completed"
+        console.error(`[AI Revision Error] ${err.message}`)
+        project.status = "failed"
         await project.save()
         res.status(500).json({error: err.message || "Failed to process revision request"})
     }

@@ -67,13 +67,15 @@ export function validateAndFixCode(code, filePath, context) {
         const componentName = funcMatch?.[1] || constMatch?.[1];
 
         if (componentName) {
-            // Check if there's already a named export
-            const namedExportRegex = new RegExp(`export\\s+(function|const)\\s+${componentName}`);
-            if (namedExportRegex.test(code)) {
-                // Convert `export function X` → `export default function X`
-                code = code.replace(new RegExp(`export\\s+(function|const)\\s+${componentName}`), `export default $1 ${componentName}`);
+            const namedFunctionExportRegex = new RegExp(`export\\s+function\\s+${componentName}`);
+            const namedConstExportRegex = new RegExp(`export\\s+const\\s+${componentName}`);
+
+            if (namedFunctionExportRegex.test(code)) {
+                code = code.replace(namedFunctionExportRegex, `export default function ${componentName}`);
+            } else if (namedConstExportRegex.test(code)) {
+                code = code.replace(namedConstExportRegex, `const ${componentName}`);
+                code = code.trimEnd() + `\n\nexport default ${componentName};\n`;
             } else {
-                // Add default export at the end
                 code = code.trimEnd() + `\n\nexport default ${componentName};\n`;
             }
             warnings.push(`${filePath}: Added missing default export for '${componentName}'`);

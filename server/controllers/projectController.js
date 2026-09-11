@@ -16,7 +16,7 @@ export async function createProject(req, res){
         return;
     }
     if(!req.user){
-        res.status(401).json({error:"Unathorized"})
+        res.status(401).json({error:"Unauthorized"})
         return;
     }
     // Create project in DB immediately with "pending" status
@@ -110,7 +110,7 @@ export async function runBackgroundGeneration(projectId, prompt){
             project.status = "completed";
             project.version = 1;
             if(result.description){
-                project.name = result.description;
+                project.description = result.description;
             }
             project.messages.push({
                 role:"assistant",
@@ -124,11 +124,11 @@ export async function runBackgroundGeneration(projectId, prompt){
         console.error(`[Background AI] Fatal generation error for project ${projectId}:`, err)
         await  Project.findByIdAndUpdate(projectId,{
             status:"failed",
-            error:err.messages,
+            error:err.message,
             $push:{
                 messages:{
                     role: "assistant",
-                    content:`✖ Generation failed: ${err.messages}`,
+                    content:`✖ Generation failed: ${err.message}`,
                     timestamp: new Date(),
                 }
             }
@@ -196,7 +196,7 @@ export async function deleteProject(req,res){
         res.status(401).json({error: "Unauthorized"})
         return
     }
-    const result = await Project.findOneAndDelete({_id:req.params.id, owner: req.params.userId})
+    const result = await Project.findOneAndDelete({_id:req.params.id, owner: req.user.userId})
     if(!result){
         res.status(404).json({error:"Project not found"})
         return;
@@ -219,7 +219,7 @@ export async function updateProjectFiles(req,res){
     }
     const project = await Project.findOne({_id: req.params.id, owner:req.user.userId})
     if(!project){
-        res.status(404).json({erro:"Project not found"})
+        res.status(404).json({error:"Project not found"})
         return 
     }
     const newFiles ={};
@@ -233,7 +233,7 @@ export async function updateProjectFiles(req,res){
 
     const filesObj = {};
     for(const [path, entry] of Object.entries(project.files)){
-        if(typeof content === "string"){
+        if(typeof entry.content === "string"){
             filesObj[path] = entry.content
         }
     }
@@ -272,7 +272,7 @@ export async function publishProject(req,res){
 }
 
 //GET /api/projects/public/:id
-//Get a publicly published project details (without sun)
+//Get a publicly published project details (without auth)
 export async function getPublicProject(req, res){
     const project = await Project.findById(req.params.id);
     if(!project){
